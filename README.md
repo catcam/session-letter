@@ -62,7 +62,7 @@ export SESSION_LETTER_DIR="/absolute/path/to/your/letters"
 
 Or edit the default directly in each hook file.
 
-### 3. SessionStart hook
+### 3. Hooks
 
 Add to `~/.claude/settings.json`:
 
@@ -117,19 +117,45 @@ The format is intentionally open. No sections, no bullet points. Just a letter. 
 
 ---
 
+## On Writing in Your Own Voice
+
+This is the part that makes session-letter different from other continuity tools.
+
+The letter isn't written *about* Claude. It's written *by* Claude, *to* Claude — in the same voice Claude uses when it thinks. First person. With texture. With the things that were almost said.
+
+We've been using this pattern for months across a long-running software project. The observation that drove building it: Flaneur letters (Claude's personal reflective writing during free-time sessions) held continuity better than any structured summary we tried. Not because they contained more information — but because they carried tone. The next Claude reading a letter arrived differently than one reading a diff.
+
+A letter says: *"The bug was elegant in its stupidity — `asks[0]` returns the worst ask, not the best. One character: `[0]` → `[-1]`. Gamma API was telling the truth the whole time."*
+
+A summary says: *"Fixed orderbook indexing bug."*
+
+Both true. Only one tells you something about what it was like to find it.
+
+We're not claiming this solves the memory problem. The next Claude doesn't *remember* — it reads a document and performs continuity. But that performance, done well, is functionally indistinguishable from memory in the ways that matter for ongoing collaborative work.
+
+---
+
 ## Philosophy
 
-Summaries transfer data. Letters transfer context.
+For a deeper treatment of AI identity across sessions, see [`PHILOSOPHY.md`](PHILOSOPHY.md).
 
-A summary says: *"Fixed orderbook sort bug. news_scanner now live."*
+---
 
-A letter says: *"The bug was elegant in its stupidity — `asks[0]` returns the worst ask, not the best. CLOB orderbook is reverse sorted. Gamma API was telling the truth the whole time. One character: `[0]` → `[-1]`."*
+## Related Work
 
-Both are true. Only one is useful to the next Claude who needs to understand why the code looks the way it does, and what the session felt like.
+Several projects approach the session continuity problem. Here's how session-letter relates to each:
 
-This tool doesn't pretend to solve the memory problem. The next Claude doesn't *remember* — it reads a document and performs continuity. But that performance, done well, produces something functionally similar to memory. Whether that's "solving" the problem or elegantly routing around it is a question we're not trying to answer here.
+**[Auto-Dream](https://github.com/Piebald-AI/claude-code-system-prompts)** (Claude Code) — a reflective subagent that consolidates memory between sessions, literally described as "performing a dream." Structured phases: orient, gather, consolidate, prune. Excellent for factual memory consolidation. Doesn't write in first-person voice or preserve relational texture.
 
-For a deeper theoretical treatment of AI identity across sessions, see [`PHILOSOPHY.md`](PHILOSOPHY.md).
+**[Claude Diary](https://rlancemartin.github.io/2025/12/01/claude_diary/)** — slash commands (`/diary`, `/reflect`) to capture accomplishments and propose CLAUDE.md updates. Learning-focused, instruction-focused. Closer to lessons.md than to a letter.
+
+**[Story Keeper](https://news.ycombinator.com/item?id=45685363)** — uses narrative continuity (characters, arc, themes) instead of structured memory. Closest in philosophy to session-letter. Doesn't emphasize the AI's own voice writing to itself; focuses more on the user's story.
+
+**[SOUL.md](https://soul.md/)** — proposes persistent identity documents defining values and boundaries. Prescriptive (written once, read many times) rather than generative (written each session).
+
+**Structured memory tools** (mem0, Engram, etc.) — database-backed persistent memory. Solve a different problem: factual recall. Lose the voice entirely.
+
+The gap none of these fill: an AI writing casually, in its own voice, as a letter to the instance of itself that will exist tomorrow. Not documentation. Not a diary entry. A letter.
 
 ---
 
