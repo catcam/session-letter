@@ -2,11 +2,13 @@
 
 **Continuity across AI sessions — letters from Claude to its future self.**
 
+[Claude Code](https://claude.ai/code) is Anthropic's CLI agent for software development. It forgets everything between sessions.
+
 ---
 
 ## The Problem
 
-Claude forgets everything between sessions. Compact summaries preserve facts, but lose voice. The next Claude knows *what happened* but not *how it felt* — the tone of the conversation, what the user was worried about, what was almost said.
+Compact summaries preserve facts, but lose voice. The next Claude knows *what happened* but not *how it felt* — the tone of the conversation, what the user was worried about, what was almost said.
 
 This is the gap between information and continuity.
 
@@ -15,6 +17,10 @@ This is the gap between information and continuity.
 At the end of each session, Claude writes a letter to its future self. Not a summary. Not a structured report. A letter — with voice, context, and the things that matter but don't fit in `lessons.md`.
 
 At the start of the next session, Claude reads the last letter. It arrives with context, not just state.
+
+## Why Not CLAUDE.md or lessons.md?
+
+Those are for facts — architecture decisions, known bugs, rules. This is for voice — how the session felt, what the user was worried about, what you'd want to know if you were starting fresh. They complement, not replace.
 
 ## How It Works
 
@@ -27,9 +33,7 @@ Three components:
 
 1. **`SKILL.md`** — the `/session-letter` skill for Claude Code
 2. **`hooks/session-start.sh`** — reads last letter at session start, injects into context
-3. **`hooks/pre-compact.sh`** — reminds Claude to write before auto-compact
-
-Optional: context monitor integration for Discord/WLED alerts at 70%/85% context usage.
+3. **`hooks/pre-compact.sh`** — checks if today's letter is written, reminds if not
 
 ---
 
@@ -42,13 +46,21 @@ mkdir -p ~/.claude/skills/session-letter
 cp SKILL.md ~/.claude/skills/session-letter/SKILL.md
 ```
 
+Claude Code automatically scans `~/.claude/skills/` for available skills.
+
 ### 2. Letters directory
 
 ```bash
 mkdir -p your-project/tasks/letters
 ```
 
-Edit `hooks/session-start.sh` — set `LETTERS_DIR` to your path.
+The hooks default to `tasks/letters` relative to your project root (where Claude Code runs). To use a different path, set the `SESSION_LETTER_DIR` environment variable:
+
+```bash
+export SESSION_LETTER_DIR="/absolute/path/to/your/letters"
+```
+
+Or edit the default directly in each hook file.
 
 ### 3. SessionStart hook
 
@@ -64,16 +76,7 @@ Add to `~/.claude/settings.json`:
           "command": "bash /path/to/session-letter/hooks/session-start.sh"
         }]
       }
-    ]
-  }
-}
-```
-
-### 4. PreCompact hook (optional but recommended)
-
-```json
-{
-  "hooks": {
+    ],
     "PreCompact": [
       {
         "hooks": [{
@@ -85,6 +88,8 @@ Add to `~/.claude/settings.json`:
   }
 }
 ```
+
+If you already have hooks configured, add to the existing arrays — don't replace them.
 
 ---
 
@@ -98,13 +103,17 @@ At the end of any session:
 
 Claude writes a letter. Next session reads it automatically.
 
+**First session:** no letter exists yet — that's expected. The hook is silent.
+
+**Letter lifecycle:** letters accumulate in `tasks/letters/`. Only the most recent is read at session start. You can archive or delete old ones freely — they're just markdown files.
+
 ---
 
 ## What a Letter Looks Like
 
 See [`examples/example-letter.md`](examples/example-letter.md).
 
-The format is intentionally open. No sections, no bullet points. Just a letter.
+The format is intentionally open. No sections, no bullet points. Just a letter. Length: whatever feels right — 200 to 600 words is typical.
 
 ---
 
@@ -118,20 +127,22 @@ A letter says: *"The bug was elegant in its stupidity — `asks[0]` returns the 
 
 Both are true. Only one is useful to the next Claude who needs to understand why the code looks the way it does, and what the session felt like.
 
+This tool doesn't pretend to solve the memory problem. The next Claude doesn't *remember* — it reads a document and performs continuity. But that performance, done well, produces something functionally similar to memory. Whether that's "solving" the problem or elegantly routing around it is a question we're not trying to answer here.
+
+For a deeper theoretical treatment of AI identity across sessions, see [`PHILOSOPHY.md`](PHILOSOPHY.md).
+
 ---
 
-## Connection to Larger Ideas
+## Multi-project setup
 
-This project is one implementation of a broader question: **how do distributed temporal instances of an AI maintain coherent identity over time?**
-
-For a theoretical treatment, see [Grammar of Presence](https://github.com/catcam/grammar-of-presence) — a paper on T-V distinction in human-AI communication, and what it reveals about identity across sessions.
+The skill is global (`~/.claude/skills/`). The letters directory is per-project (`tasks/letters/` or your `SESSION_LETTER_DIR`). Each project maintains its own letter history independently.
 
 ---
 
 ## Contributing
 
 PRs welcome. Especially:
-- Ports to other AI coding assistants
+- Ports to other AI coding assistants (Gemini CLI, Cursor, Copilot)
 - Alternative letter formats
 - Integration with other context monitors
 
