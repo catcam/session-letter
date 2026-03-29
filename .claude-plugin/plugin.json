@@ -1,0 +1,13 @@
+{
+  "name": "session-letter",
+  "version": "1.0.0",
+  "description": "Continuity across AI sessions — Claude writes a letter to its future self at session end, reads it at session start",
+  "author": {
+    "name": "Nikša Barlović",
+    "url": "https://github.com/catcam"
+  },
+  "homepage": "https://github.com/catcam/session-letter",
+  "repository": "https://github.com/catcam/session-letter",
+  "license": "MIT",
+  "keywords": ["continuity", "memory", "sessions", "context", "letter", "workflow"]
+}
