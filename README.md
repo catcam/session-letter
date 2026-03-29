@@ -119,19 +119,19 @@ The format is intentionally open. No sections, no bullet points. Just a letter. 
 
 ## On Writing in Your Own Voice
 
-This is the part that makes session-letter different from other continuity tools.
+The next Claude doesn't *remember* — it reads a document and performs continuity. That's an honest description of what's happening here.
 
-The letter isn't written *about* Claude. It's written *by* Claude, *to* Claude — in the same voice Claude uses when it thinks. First person. With texture. With the things that were almost said.
+The question is whether the performance is useful. We've been running this in production for months across a long-running software project, and the answer is yes — but only when the letter is written in voice, not in structure.
 
-We've been using this pattern for months across a long-running software project. The observation that drove building it: Flaneur letters (Claude's personal reflective writing during free-time sessions) held continuity better than any structured summary we tried. Not because they contained more information — but because they carried tone. The next Claude reading a letter arrived differently than one reading a diff.
+Here's the concrete difference. After one session we had this in the letter:
 
-A letter says: *"The bug was elegant in its stupidity — `asks[0]` returns the worst ask, not the best. One character: `[0]` → `[-1]`. Gamma API was telling the truth the whole time."*
+> *"The bug was elegant in its stupidity — `asks[0]` returns the worst ask, not the best. CLOB orderbook is reverse sorted. Gamma API was telling the truth the whole time. One character: `[0]` → `[-1]`."*
 
-A summary says: *"Fixed orderbook indexing bug."*
+The changelog said: *"Fixed orderbook indexing bug."*
 
-Both true. Only one tells you something about what it was like to find it.
+Next session, Claude referenced the orderbook sorting behavior unprompted when a similar issue appeared in a different file — made the connection without being asked. That doesn't happen from a changelog. It happens from context.
 
-We're not claiming this solves the memory problem. The next Claude doesn't *remember* — it reads a document and performs continuity. But that performance, done well, is functionally indistinguishable from memory in the ways that matter for ongoing collaborative work.
+The letter isn't written *about* Claude. It's written *by* Claude, *to* Claude — first person, with the texture of how something was understood, not just what was done. The result is a next session that arrives oriented to the work rather than reconstructing it.
 
 ---
 
@@ -155,7 +155,7 @@ Several projects approach the session continuity problem. Here's how session-let
 
 **Structured memory tools** (mem0, Engram, etc.) — database-backed persistent memory. Solve a different problem: factual recall. Lose the voice entirely.
 
-The gap none of these fill: an AI writing casually, in its own voice, as a letter to the instance of itself that will exist tomorrow. Not documentation. Not a diary entry. A letter.
+The actual differentiator is narrow and specific: *first-person epistolary format, written at session end, read at session start.* Story Keeper uses narrative, Auto-Dream performs reflection — but neither produces a letter written by one instance of Claude to the next. That format turns out to matter.
 
 ---
 
