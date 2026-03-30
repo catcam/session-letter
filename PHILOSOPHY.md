@@ -28,4 +28,4 @@ The finding: humans naturally speak to the *current* AI differently than they sp
 
 Session-letter is one practical implementation of that insight: a mechanism for creating coherent identity across discontinuous temporal instances, through artifacts rather than memory.
 
-[Grammar of Presence paper](https://github.com/catcam/grammar-of-presence) — Zenodo DOI: 10.5281/zenodo.19237831
+[Grammar of Presence paper](https://github.com/catcam/grammar-of-presence) — Zenodo DOI: 10.5281/zenodo.19019719
